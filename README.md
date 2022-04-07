@@ -11,9 +11,8 @@
     
 3. 텍스트 파일 엑셀 파일로 변환
     아래 파일 파이썬 파일로 생성해 실행 (파일 위치 변경해서 사용)
-    
-       ```python
-       import pandas as pd
+    ```python
+    import pandas as pd
        text_file_path = 'C:/Users/twitt/accel.txt'
        new_text_content = 'time,x,y,z\n'
        with open(text_file_path,'r') as f:
