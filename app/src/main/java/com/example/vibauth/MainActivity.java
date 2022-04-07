@@ -46,42 +46,34 @@ public class MainActivity extends Activity {
         // 1. Vibrator 객체 생성
         Vibrator vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
         Button btnVibrate = findViewById(R.id.button1);
-
         btnVibrate.setOnClickListener(new View.OnClickListener(){
             @Override public void onClick(View view) {
 
                 // 2. 진동 구현: 1000ms동안 100 강도의 진동
-                vibrator.vibrate(VibrationEffect.createOneShot(1000, 1)); // 1초간 진동
+                vibrator.vibrate(VibrationEffect.createOneShot(1000, 3)); // 1초간 진동
                 //Log.v(TAG,"~~~~~~~~VIBRATION~~~~~~~~");
                 TextView text=findViewById(R.id.text);
                 SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-
+                final long[] ex = {0};
+                final long[] first_time = new long[1];
                 SensorEventListener mListener = new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent event) {
+
                         float[] v = event.values;
                         switch(event.sensor.getType()) {
                             case Sensor.TYPE_ACCELEROMETER:
-
-                                text.setText("x = " + v[0] +'\n' + "y = " + v[1] + '\n' + "z = " + v[2] );
-                                Log.v(TAG,event.timestamp+" :  x = " + v[0] +' ' + "y = " + v[1] + ' ' + "z = " + v[2]);
-                                /*
-                                timestamp.add(event.timestamp);
-                                List<Float> acc = new ArrayList<>();
-                                acc.add(v[0]);
-                                acc.add(v[1]);
-                                acc.add(v[2]);
-                                buf.add(acc);
-                                if(buf.size()>=1000) {
-                                    for(int i=0;i<buf.size();i++){
-                                        Log.v(TAG,timestamp.get(i)+" :  x = " + buf.get(i).get(0) +' ' + "y = " + buf.get(i).get(1) + ' ' + "z = " + buf.get(i).get(2));
-                                    }
-                                    buf.clear();
+                                if(ex[0]==0) first_time[0] = event.timestamp;
+                                if(ex[0] == event.timestamp)break;
+                                else{
+                                    ex[0] =event.timestamp;
                                 }
-                                */
-
-                                //Log.v(TAG,event.timestamp+" :  x = " + v[0] +' ' + "y = " + v[1] + ' ' + "z = " + v[2]);
+                                text.setText("x = " + v[0] +'\n' + "y = " + v[1] + '\n' + "z = " + v[2] );
+                                Log.v(TAG,"A"+(event.timestamp-first_time[0])/1000000+"," + v[0] + "," + v[1]  + "," + v[2]);
                                 break;
+                            case Sensor.TYPE_GYROSCOPE:
+                                Log.v(TAG,"G"+(event.timestamp-first_time[0])/1000000+"," + v[0] + "," + v[1]  + "," + v[2]);
+
                         }
                     }
                     //센서 값이 오차가 있을 수 있다. 잘못된값?
@@ -93,7 +85,10 @@ public class MainActivity extends Activity {
 //가속도센서
                 sensorManager.registerListener(mListener,
                         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                        1000);
+                        10000);
+                sensorManager.registerListener(mListener,
+                        sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+                        10000);
 
             }
         });
@@ -109,3 +104,19 @@ public class MainActivity extends Activity {
         super.onPause();
     }
 }
+                               /*
+                                timestamp.add(event.timestamp);
+                                List<Float> acc = new ArrayList<>();
+                                acc.add(v[0]);
+                                acc.add(v[1]);
+                                acc.add(v[2]);
+                                buf.add(acc);
+                                if(buf.size()>=1000) {
+                                    for(int i=0;i<buf.size();i++){
+                                        Log.v(TAG,timestamp.get(i)+" :  x = " + buf.get(i).get(0) +' ' + "y = " + buf.get(i).get(1) + ' ' + "z = " + buf.get(i).get(2));
+                                    }
+                                    buf.clear();
+                                }
+                                */
+
+//Log.v(TAG,event.timestamp+" :  x = " + v[0] +' ' + "y = " + v[1] + ' ' + "z = " + v[2]);
