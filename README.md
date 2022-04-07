@@ -10,18 +10,18 @@
        ```python
        import pandas as pd
 
-text_file_path = 'C:/Users/twitt/accel.txt'
-new_text_content = 'time,x,y,z\n'
-with open(text_file_path,'r') as f:
-lines = f.readlines()
-for i in enumerate(lines):
-new_text_content+=i[1][43:]
-with open('C:/Users/twitt/accel1.txt','w') as f:
-f.write(new_text_content)
+        text_file_path = 'C:/Users/twitt/accel.txt'
+        new_text_content = 'time,x,y,z\n'
+        with open(text_file_path,'r') as f:
+        lines = f.readlines()
+        for i in enumerate(lines):
+        new_text_content+=i[1][43:]
+        with open('C:/Users/twitt/accel1.txt','w') as f:
+        f.write(new_text_content)
 
-df = pd.DataFrame(pd.read_csv('C:/Users/twitt/accel1.txt',sep=','))
+        df = pd.DataFrame(pd.read_csv('C:/Users/twitt/accel1.txt',sep=','))
 
-print(df)
+        print(df)
 
-df.to_excel('accel.xlsx',index=False)
-```
+        df.to_excel('accel.xlsx',index=False)
+        ```
